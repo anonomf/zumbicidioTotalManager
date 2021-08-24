@@ -1,0 +1,175 @@
+<aura:component controller="GestaoBunkerCMPController" implements="force:appHostable">
+
+    <!-- Variaveis -->
+
+    <!-- Mostrar Loading ou Não -->
+    <aura:attribute name="showSpinner"      type="Boolean" default="false"/>
+    <!-- Mostrar Modal ou Não -->
+    <aura:attribute name="showModal"        type="Boolean" default="false"/>
+
+    <!-- Variaveis do Combobox -->
+    <aura:attribute name="options"          type="List" />
+
+    <!-- Variavel com informações do Bunker selecionado -->
+    <aura:attribute name="bunkerInfo"       type="Object"/>
+    <aura:attribute name="bunkerSelecionado"    type="String" />
+    
+    <!-- Variaveis do Datatable -->
+    <aura:attribute name="data"             type="Object"/>
+    <aura:attribute name="columns"          type="List"/>
+
+    <!-- Variaveis do ProgressBar -->
+    <aura:attribute name="direction"        type="String" default="fill" />
+    <aura:attribute name="checked"          type="Boolean" default="true" />
+
+    <!-- FIM Variaveis -->
+
+    <!-- Metodos -->
+    <aura:handler name="init" value="{!this}" action="{! c.init }" />
+
+    <!-- FIM Metodos -->
+
+    <!-- FRONT -->
+    <lightning:card variant="Narrow" title="Gestão de Bunkers" iconName="custom:custom9">
+        
+        <!-- <aura:set attribute="actions">
+            <lightning:button variant="brand" label="Incluir Membro" onclick="{! c.showModal }" iconName="standard:return_order"/>
+        </aura:set> -->
+
+        <p class="slds-p-horizontal_small" style="min-height: 100px;">
+
+            <aura:if isTrue="{! v.showSpinner }">
+                <lightning:spinner alternativeText="Loading" size="medium" />
+            </aura:if>
+
+            <lightning:combobox name="bunker-combobox" label="Selecione um Bunker" placeholder="Clique aqui para selecionar um Bunker" options="{! v.options }" onchange="{! c.handleChange }"/>  
+        
+        </p>
+
+
+        <aura:if isTrue="{! v.bunkerInfo != null }">
+            <!-- ESTATISTICAS DO BUNKER -->
+            <div class="slds-grid slds-wrap">
+
+                <div class="slds-col slds-size_2-of-2">
+                    <div class="slds-card__body_inner">
+                        <aura:if isTrue="{! v.bunkerInfo.ativo }">
+                            <h3 class="bunker-message-ativo">Bunker ativo!</h3>
+                            <aura:set attribute="else">
+                                <h3 class="bunker-message-inativo">Bunker desativado!</h3>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-card__body_inner">
+                        <lightning:card iconName="standard:recipe" title="Saúde do Bunker">
+                            <p class="slds-p-horizontal_small" >
+                                <p title="Saúde do Bunker">
+                                    <lightning:progressRing value="{! v.bunkerInfo.percentHumanos }" direction="{!v.direction}" variant="base-autocomplete" size="large" />
+                                </p>
+                                <p title="Percentual de Humanos">
+                                    Percentual de Humanos no bunker {!v.bunkerInfo.nome}: <strong>{! v.bunkerInfo.percentHumanos }%</strong>
+                                    <lightning:progressBar title="Percentual de Humano" value="{! v.bunkerInfo.percentHumanos }" size="large" />
+                                </p>
+                                <p title="Percentual de Zumbis">
+                                    Percentual de Zumbis no bunker {!v.bunkerInfo.nome}: <strong>{! v.bunkerInfo.percentZumbis }%</strong>
+                                    <lightning:progressBar title="Percentual de Zumbis" value="{! v.bunkerInfo.percentZumbis }" size="large" />
+                                </p>
+                            </p>
+                        </lightning:card>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-card__body_inner">
+                        <lightning:card iconName="standard:recipe" title="Capacidade e Lotação">
+                            <p class="slds-p-horizontal_small" >
+                                <p title="Capacidade de Criaturas">
+                                    Capacidade de Criaturas no Bunker {!v.bunkerInfo.nome}: {! v.bunkerInfo.capacidade }
+                                </p>
+                                <p title="População">
+                                    População atual no Bunker {!v.bunkerInfo.nome}: {! v.bunkerInfo.populacao }
+                                </p>
+                                <p title="Capacidade de Criaturas">
+                                    Percentual de Lotação: <strong>{! v.bunkerInfo.percentLotacao }%</strong> 
+                                    <lightning:progressBar title="Lotação do Bunker" value="{! v.bunkerInfo.percentLotacao }" size="large" />
+                                </p>
+                            </p>
+                        </lightning:card>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-card__body_inner">
+                        <lightning:card iconName="standard:recipe" title="Defesa do Bunker">
+                            <p class="slds-p-horizontal_small" >
+                                <p title="Defesa do Bunker">
+                                    <lightning:progressRing value="{! v.bunkerInfo.defesa  }" direction="{!v.direction}" variant="base-autocomplete" size="large" />
+                                </p>
+                                <p title="Percentual de Defesa do Bunker">
+                                    Percentual de Defesa do Bunker {!v.bunkerInfo.nome}: <strong>{! v.bunkerInfo.defesa }%</strong> 
+                                    <lightning:progressBar title="Defesa do Bunker" value="{! v.bunkerInfo.defesa }" size="large" />
+                                </p>
+                            </p>
+                        </lightning:card>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA DOS MEMBROS -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-card__body_inner">
+                    <lightning:card iconName="standard:lead" title="Membros do Bunker">
+                        <aura:set attribute="actions">
+                            <lightning:button variant="brand" label="Incluir Membro" onclick="{! c.showModal }" iconName="standard:return_order"/>
+                        </aura:set>
+                        
+                        <div style="height: 300px">
+                            <lightning:datatable
+                            title="Membros do Bunker"
+                            keyField="id"
+                            data="{! v.data }"
+                            columns="{! v.columns }"
+                            hideCheckboxColumn="true"
+                            onrowaction="{! c.viewRecord }"/>
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+        </aura:if>
+
+    </lightning:card>
+
+    <!-- MODAL DO INCLUIR MEMBRO -->
+    <aura:if isTrue="{!v.showModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" 
+                 aria-modal="true" aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open">
+            
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModal }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        Incluir Membro No Bunker
+                    </h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:card iconName="standard:lead" title="Criaturas">
+                        <p class="slds-p-horizontal_small" >
+                            
+                        </p>
+                    </lightning:card>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+</aura:component>	
