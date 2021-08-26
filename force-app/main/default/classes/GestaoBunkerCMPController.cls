@@ -25,6 +25,20 @@ public with sharing class GestaoBunkerCMPController {
         
         return bunkerToReturn;
     }
+    
+    @AuraEnabled
+    public static Criatura recuperaCri( String criId ){
+        Criatura criToReturn = new Criatura();
+
+        List<Criatura__c> criaturas = [SELECT id, Name, RecordType.name FROM Criatura__c WHERE Bunker__c = :criId limit 200];
+        if( !criaturas.isEmpty() ){
+            criToReturn.crId         = criaturas[0].Id;
+            criToReturn.nome         = criaturas[0].Name;
+            criToReturn.tipo   		 = criaturas[0].RecordType.name;
+            //criToReturn.membrosDoBunker = getMembrosBunker( criaturas );
+        }
+        return criToReturn;
+    }
 
     private static Decimal getPercentualHumanos( List<Criatura__c> criaturas ){
         Decimal percentHumano = 0;
@@ -74,7 +88,7 @@ public with sharing class GestaoBunkerCMPController {
         }
         return defesa/100;
     }
-      
+    
     public class Bunker{
         @AuraEnabled
         public Boolean ativo;
@@ -108,5 +122,5 @@ public with sharing class GestaoBunkerCMPController {
         @AuraEnabled
         public Decimal defesa;
     }
-
+    
 }

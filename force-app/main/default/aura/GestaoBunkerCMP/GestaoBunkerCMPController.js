@@ -9,6 +9,10 @@
     handleChange: function (component, event, helper) {
         helper.carregaMembros(component, event);
     },
+    
+    handleChangeCri: function (component, event, helper) {
+        helper.carregaCri(component, event);
+    },
 
     viewRecord : function(component, event, helper) {
         helper.viewRecord( component, event );

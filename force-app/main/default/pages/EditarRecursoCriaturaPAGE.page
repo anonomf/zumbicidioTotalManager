@@ -1,0 +1,31 @@
+<apex:page standardController="Criatura__c" extensions="EditarCriaturaRecursoPAGEExtension">
+
+    <apex:form>
+        <apex:pageBlock title="Tela de Edição de Criaturas e Recursos">
+            <apex:pageMessages />
+            <apex:pageBlockButtons>
+                <apex:commandButton value="Voltar" action="{!cancelar}" />
+                <apex:commandButton value="Salvar Dados" action="{!save}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Informações da Criatura: {!criatura__c.Name}">
+                <apex:inputField value="{!criatura__c.Name}"/>
+                <apex:inputField value="{!criatura__c.Idade__c}"/>
+                <apex:inputField value="{!criatura__c.Bunker__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Editar Recursos da Criatura">
+                <apex:dataTable value="{!criatura__c.RecursosCriatura__r}" var="recurso">
+                    <apex:column>
+                        <apex:inputField value="{!recurso.Recurso__c}"/>
+                    </apex:column>
+                    <apex:column>
+                        <apex:inputField value="{!recurso.Quantidade__c}"/>
+                    </apex:column>
+                    <apex:column>
+                        <apex:inputField value="{!recurso.AcrescimoDefesa__c}"/>
+                    </apex:column>
+                </apex:dataTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+
+</apex:page>

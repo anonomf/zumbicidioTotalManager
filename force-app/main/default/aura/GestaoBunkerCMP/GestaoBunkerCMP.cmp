@@ -1,4 +1,4 @@
-<aura:component controller="GestaoBunkerCMPController" implements="force:appHostable">
+<aura:component controller="GestaoBunkerCMPController" implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
 
     <!-- Variaveis -->
 
@@ -160,10 +160,10 @@
                     </h2>
                 </header>
                 
-                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div class="slds-modal__content slds-p-around_xx-large" id="modal-content-id-1">
                     <lightning:card iconName="standard:lead" title="Criaturas">
                         <p class="slds-p-horizontal_small" >
-                            
+                            <lightning:combobox name="criaturas-combobox" label="Selecione uma Criatura" placeholder="Clique aqui para selecionar uma Criatura" options="{! v.options }" onchange="{! c.handleChangeCri }"/>
                         </p>
                     </lightning:card>
                 </div>
