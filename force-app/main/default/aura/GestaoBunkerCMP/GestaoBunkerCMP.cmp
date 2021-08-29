@@ -1,32 +1,27 @@
 <aura:component controller="GestaoBunkerCMPController" implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
 
     <!-- Variaveis -->
-
     <!-- Mostrar Loading ou Não -->
-    <aura:attribute name="showSpinner"      type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
     <!-- Mostrar Modal ou Não -->
-    <aura:attribute name="showModal"        type="Boolean" default="false"/>
-
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
     <!-- Variaveis do Combobox -->
-    <aura:attribute name="options"          type="List" />
-
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="optionsCri" type="List" />
+    <aura:attribute name="criSelecionada" type="String" />
     <!-- Variavel com informações do Bunker selecionado -->
-    <aura:attribute name="bunkerInfo"       type="Object"/>
-    <aura:attribute name="bunkerSelecionado"    type="String" />
-    
+    <aura:attribute name="bunkerInfo" type="Object"/>
+    <aura:attribute name="bunkerSelecionado" type="String" />
     <!-- Variaveis do Datatable -->
-    <aura:attribute name="data"             type="Object"/>
-    <aura:attribute name="columns"          type="List"/>
-
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
     <!-- Variaveis do ProgressBar -->
-    <aura:attribute name="direction"        type="String" default="fill" />
-    <aura:attribute name="checked"          type="Boolean" default="true" />
-
+    <aura:attribute name="direction" type="String" default="fill" />
+    <aura:attribute name="checked" type="Boolean" default="true" />
     <!-- FIM Variaveis -->
 
     <!-- Metodos -->
     <aura:handler name="init" value="{!this}" action="{! c.init }" />
-
     <!-- FIM Metodos -->
 
     <!-- FRONT -->
@@ -45,7 +40,6 @@
             <lightning:combobox name="bunker-combobox" label="Selecione um Bunker" placeholder="Clique aqui para selecionar um Bunker" options="{! v.options }" onchange="{! c.handleChange }"/>  
         
         </p>
-
 
         <aura:if isTrue="{! v.bunkerInfo != null }">
             <!-- ESTATISTICAS DO BUNKER -->
@@ -163,8 +157,11 @@
                 <div class="slds-modal__content slds-p-around_xx-large" id="modal-content-id-1">
                     <lightning:card iconName="standard:lead" title="Criaturas">
                         <p class="slds-p-horizontal_small" >
-                            <lightning:combobox name="criaturas-combobox" label="Selecione uma Criatura" placeholder="Clique aqui para selecionar uma Criatura" options="{! v.options }" onchange="{! c.handleChangeCri }"/>
+                            <lightning:combobox name="criaturas-combobox" label="Selecione uma Criatura" placeholder="Clique aqui para selecionar uma Criatura" options="{! v.optionsCri }" onchange="{! c.handleChangeCri }"/>
                         </p>
+                        <aura:set attribute="footer">
+                            <lightning:button variant="brand" label="Incluir Criatura" title="Clique aqui para incluir uma criatura." onclick="{! c.incluirCri }" disabled="{! v.criSelecionada == null }" />
+                        </aura:set>
                     </lightning:card>
                 </div>
             </div>

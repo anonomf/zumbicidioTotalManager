@@ -1,5 +1,6 @@
 public class AdicionarRecursoCriaturaCMPController {
-	@AuraEnabled
+	
+    @AuraEnabled
     public static List<Recurso__c> recuperaRecursos( String recordId ){
         List<Recurso__c> recursosToReturn  = new List<Recurso__c>();
         Set<Id> recursosIds = new Set<Id>();
@@ -23,4 +24,5 @@ public class AdicionarRecursoCriaturaCMPController {
         
         insert recursoCriatura; 
     }
+    
 }

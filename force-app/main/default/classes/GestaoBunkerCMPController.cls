@@ -20,24 +20,23 @@ public with sharing class GestaoBunkerCMPController {
             bunkerToReturn.percentHumanos   = getPercentualHumanos( criaturas );
             bunkerToReturn.percentZumbis    = getPercentualZumbis( criaturas );
             bunkerToReturn.percentLotacao   = criaturas[0].Bunker__r.Populacao__c.divide( criaturas[0].Bunker__r.Capacidade__c, 2) * 100;
-            bunkerToReturn.membrosDoBunker = getMembrosBunker( criaturas );
+            bunkerToReturn.membrosDoBunker  = getMembrosBunker( criaturas );
         }
         
         return bunkerToReturn;
     }
-    
-    @AuraEnabled
-    public static Criatura recuperaCri( String criId ){
-        Criatura criToReturn = new Criatura();
 
-        List<Criatura__c> criaturas = [SELECT id, Name, RecordType.name FROM Criatura__c WHERE Bunker__c = :criId limit 200];
-        if( !criaturas.isEmpty() ){
-            criToReturn.crId         = criaturas[0].Id;
-            criToReturn.nome         = criaturas[0].Name;
-            criToReturn.tipo   		 = criaturas[0].RecordType.name;
-            //criToReturn.membrosDoBunker = getMembrosBunker( criaturas );
-        }
-        return criToReturn;
+    @AuraEnabled
+    public static List<Criatura__c> criSelecionada( String bunkerId ){
+        return [SELECT id, name FROM Criatura__c limit 200];
+    }
+
+    @AuraEnabled
+    public static void incluirCriBunker (String bunkerId, String criaturaId){
+        Criatura__c criatura    = new Criatura__c();
+        criatura.Id             = criaturaId;
+        criatura.Bunker__c      = bunkerId;
+        update criatura;
     }
 
     private static Decimal getPercentualHumanos( List<Criatura__c> criaturas ){

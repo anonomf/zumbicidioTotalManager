@@ -11,7 +11,11 @@
     },
     
     handleChangeCri: function (component, event, helper) {
-        helper.carregaCri(component, event);
+        helper.carregaCriSelecionada(component, event);
+    },
+    
+    incluirCri: function (component, event, helper) {
+        helper.incluirCriHelper(component, event);
     },
 
     viewRecord : function(component, event, helper) {

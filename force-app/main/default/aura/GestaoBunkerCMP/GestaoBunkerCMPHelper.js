@@ -26,6 +26,38 @@
         $A.enqueueAction(action); 
 	},
 
+    carregaCriaturas : function( component, event ) {
+        
+		let action = component.get("c.recuperaCriaturas");
+        component.set('v.showSpinner', true);
+
+        action.setCallback(this, function(response) {
+            let state = response.getState();
+            let errors = response.getError();
+            if (state === "SUCCESS") {
+                component.set('v.showSpinner', false);
+                
+                var rows = response.getReturnValue();
+                for( var i =0; i < rows.length; i++ ){
+                    var row = rows[i];
+                    row.label     = row.Name;
+                    row.value     = row.Id;
+                }
+                console.log('rows',rows);
+                if( rows != null ){
+                    component.set('v.options', rows);
+                }
+            }
+        });
+        $A.enqueueAction(action); 
+	},
+
+    //Teste
+    carregaCriSelecionada : function (component, event ){
+        let criSelecionada = event.getParam("value");
+        component.set("v.criSelecionada", criSelecionada);
+    },
+
     setColumns : function( component ) {
         component.set('v.columns',[
 
@@ -49,6 +81,12 @@
                 iconPosition: 'left'
             }}
         ])
+    },
+
+    selecionaBunker : function( component, event ) {
+        let bunkerSelecionado = event.getParam("value");
+        component.set("v.bunkerSelecionado", bunkerSelecionado);
+        this.carregaMembros(component, event);
     },
 
     carregaMembros : function( component, event ) {
@@ -102,5 +140,58 @@
             viewRecordEvent.fire();
         }
     },
+
+    incluirCriaHelper : function(component, event) {
+        
+        let action = component.get("c.incluirCriBunker");
+        let bunkerSelecionado = component.get("v.bunkerSelecionado");
+        let criSelecionada = component.get("v.criSelecionada");
+        
+        component.set('v.showSpinner', true);
+
+        action.setParams({
+            bunkerId : bunkerSelecionado,
+            criaturaId : criSelecionada
+        });
+
+        action.setCallback(this, function(response) {
+            let state = response.getState();
+            let errors = response.getError();
+            if (state === "SUCCESS") {
+                var retorno = response.getReturnValue();
+
+                this.showToast(component, event);
+                console.log('>>> return:: ', retorno);
+
+                component.set('v.showSpinner', false);
+
+                this.closeModalHelper(component, event);
+                this.carregaMembros(component, event);
+
+            }else{
+                console.log('>>> return error:: ', errors);
+            }
+        });
+        $A.enqueueAction(action); 
+    },
+
+    showToast : function(component, event) {
+        var toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            "title": "Sucesso!",
+            "message": "A criatura foi incluida no bunker com sucesso.",
+            "type":"success"
+        });
+        toastEvent.fire();
+    },
+
+    showModalHelper : function(component, event) {
+        component.set("v.showModal",true);
+        this.carregaCriaturas( component, event );
+	},
+    
+    closeModalHelper : function(component, event) {
+        component.set("v.showModal",false);
+	},
 
 })
