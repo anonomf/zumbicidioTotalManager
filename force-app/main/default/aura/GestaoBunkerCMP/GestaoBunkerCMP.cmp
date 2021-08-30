@@ -27,10 +27,6 @@
     <!-- FRONT -->
     <lightning:card variant="Narrow" title="Gestão de Bunkers" iconName="custom:custom9">
         
-        <!-- <aura:set attribute="actions">
-            <lightning:button variant="brand" label="Incluir Membro" onclick="{! c.showModal }" iconName="standard:return_order"/>
-        </aura:set> -->
-
         <p class="slds-p-horizontal_small" style="min-height: 100px;">
 
             <aura:if isTrue="{! v.showSpinner }">
@@ -43,18 +39,18 @@
 
         <aura:if isTrue="{! v.bunkerInfo != null }">
             <!-- ESTATISTICAS DO BUNKER -->
-            <div class="slds-grid slds-wrap">
+        <div class="slds-grid slds-wrap">
 
-                <div class="slds-col slds-size_2-of-2">
-                    <div class="slds-card__body_inner">
-                        <aura:if isTrue="{! v.bunkerInfo.ativo }">
-                            <h3 class="bunker-message-ativo">Bunker ativo!</h3>
-                            <aura:set attribute="else">
-                                <h3 class="bunker-message-inativo">Bunker desativado!</h3>
-                            </aura:set>
-                        </aura:if>
-                    </div>
+            <div class="slds-col slds-size_2-of-2">
+                <div class="slds-card__body_inner">
+                    <aura:if isTrue="{! v.bunkerInfo.ativo }">
+                        <h3 class="bunker-message-ativo">Bunker ativo!</h3>
+                        <aura:set attribute="else">
+                            <h3 class="bunker-message-inativo">Bunker desativado!</h3>
+                        </aura:set>
+                    </aura:if>
                 </div>
+            </div>
 
                 <div class="slds-col slds-size_1-of-2">
                     <div class="slds-card__body_inner">
@@ -154,8 +150,11 @@
                     </h2>
                 </header>
                 
-                <div class="slds-modal__content slds-p-around_xx-large" id="modal-content-id-1">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                     <lightning:card iconName="standard:lead" title="Criaturas">
+                        <aura:if isTrue="{! v.showSpinner }">
+                            <lightning:spinner alternativeText="Loading" size="medium" />
+                        </aura:if>
                         <p class="slds-p-horizontal_small" >
                             <lightning:combobox name="criaturas-combobox" label="Selecione uma Criatura" placeholder="Clique aqui para selecionar uma Criatura" options="{! v.optionsCri }" onchange="{! c.handleChangeCri }"/>
                         </p>

@@ -26,69 +26,6 @@
         $A.enqueueAction(action); 
 	},
 
-    carregaCriaturas : function( component, event ) {
-        
-		let action = component.get("c.recuperaCriaturas");
-        component.set('v.showSpinner', true);
-
-        action.setCallback(this, function(response) {
-            let state = response.getState();
-            let errors = response.getError();
-            if (state === "SUCCESS") {
-                component.set('v.showSpinner', false);
-                
-                var rows = response.getReturnValue();
-                for( var i =0; i < rows.length; i++ ){
-                    var row = rows[i];
-                    row.label     = row.Name;
-                    row.value     = row.Id;
-                }
-                console.log('rows',rows);
-                if( rows != null ){
-                    component.set('v.options', rows);
-                }
-            }
-        });
-        $A.enqueueAction(action); 
-	},
-
-    //Teste
-    carregaCriSelecionada : function (component, event ){
-        let criSelecionada = event.getParam("value");
-        component.set("v.criSelecionada", criSelecionada);
-    },
-
-    setColumns : function( component ) {
-        component.set('v.columns',[
-
-            {label: 'Membro', fieldName: 'nome', type: 'text'},
-            {label: 'Tipo de Criatura', fieldName: 'tipo', type: 'text'},
-            {label: 'Defesa', fieldName: 'defesa', type: 'percent'},
-            {type: "button", typeAttributes: {
-                label: 'Ver Criatura',
-                name: 'View',
-                title: 'Clique aqui para abrir este registro',
-                disabled: false,
-                value: 'view',
-                iconPosition: 'left'
-            }},
-            {type: "button", typeAttributes: {
-                label: 'Editar/Expulsar',
-                name: 'Edit',
-                title: 'Clique aqui para editar este registro',
-                disabled: false,
-                value: 'edit',
-                iconPosition: 'left'
-            }}
-        ])
-    },
-
-    selecionaBunker : function( component, event ) {
-        let bunkerSelecionado = event.getParam("value");
-        component.set("v.bunkerSelecionado", bunkerSelecionado);
-        this.carregaMembros(component, event);
-    },
-
     carregaMembros : function( component, event ) {
         let bunkerSelecionado = event.getParam("value");
         let action = component.get("c.recuperaBunkerMembros");
@@ -120,6 +57,31 @@
 
     },
 
+    setColumns : function( component ) {
+        component.set('v.columns',[
+
+            {label: 'Membro', fieldName: 'nome', type: 'text'},
+            {label: 'Tipo de Criatura', fieldName: 'tipo', type: 'text'},
+            {label: 'Defesa', fieldName: 'defesa', type: 'percent'},
+            {type: "button", typeAttributes: {
+                label: 'Ver Criatura',
+                name: 'View',
+                title: 'Clique aqui para abrir este registro',
+                disabled: false,
+                value: 'view',
+                iconPosition: 'left'
+            }},
+            {type: "button", typeAttributes: {
+                label: 'Editar/Expulsar',
+                name: 'Edit',
+                title: 'Clique aqui para editar este registro',
+                disabled: false,
+                value: 'edit',
+                iconPosition: 'left'
+            }}
+        ])
+    },
+
     viewRecord : function(component, event) {
         var recId = event.getParam('row').sfId;
         var actionName = event.getParam('action').name;
@@ -141,7 +103,51 @@
         }
     },
 
-    incluirCriaHelper : function(component, event) {
+    recuperaCri : function( component, event ) {
+        
+		let action = component.get("c.criSelecionada");
+        let bunkerSelecionado = component.get("v.bunkerSelecionado");
+        component.set('v.showSpinner', true);
+
+        action.setParams({
+            bunkerId : bunkerSelecionado
+        });
+
+        action.setCallback(this, function(response) {
+            let state = response.getState();
+            let errors = response.getError();
+            if (state === "SUCCESS") {
+                component.set('v.showSpinner', false);
+                
+                var rows = response.getReturnValue();
+                for( var i =0; i < rows.length; i++ ){
+                    var row       = rows[i];
+                    row.label     = row.Name;
+                    row.value     = row.Id;
+                }
+                console.log('rows',rows);
+                if( rows != null ){
+                    component.set('v.optionsCri', rows);
+                }
+            }else{
+                console.log('ERROR::', errors[0]).message;
+            }
+        });
+        $A.enqueueAction(action); 
+	},
+
+    recuperaCriSelecionada : function ( component, event ){
+        let criSelecionada = event.getParam("value");
+        component.set("v.criSelecionada", criSelecionada);
+    },
+
+    selecionaBunker : function( component, event ) {
+        let bunkerSelecionado = event.getParam("value");
+        component.set("v.bunkerSelecionado", bunkerSelecionado);
+        this.carregaMembros(component, event);
+    },
+
+    incluirCriHelper : function( component, event ) {
         
         let action = component.get("c.incluirCriBunker");
         let bunkerSelecionado = component.get("v.bunkerSelecionado");
@@ -162,7 +168,6 @@
 
                 this.showToast(component, event);
                 console.log('>>> return:: ', retorno);
-
                 component.set('v.showSpinner', false);
 
                 this.closeModalHelper(component, event);
@@ -175,7 +180,7 @@
         $A.enqueueAction(action); 
     },
 
-    showToast : function(component, event) {
+    showToast : function( component, event ) {
         var toastEvent = $A.get("e.force:showToast");
         toastEvent.setParams({
             "title": "Sucesso!",
@@ -185,12 +190,12 @@
         toastEvent.fire();
     },
 
-    showModalHelper : function(component, event) {
+    showModalHelper : function( component, event ) {
         component.set("v.showModal",true);
         this.carregaCriaturas( component, event );
 	},
     
-    closeModalHelper : function(component, event) {
+    closeModalHelper : function( component, event ) {
         component.set("v.showModal",false);
 	},
 

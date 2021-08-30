@@ -1,4 +1,4 @@
-public with sharing class GestaoBunkerCMPController {
+public class GestaoBunkerCMPController {
     
     @AuraEnabled
     public static List<Bunker__c> recuperaBunkers(){

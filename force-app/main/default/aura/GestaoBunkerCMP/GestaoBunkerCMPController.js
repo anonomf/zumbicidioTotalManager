@@ -11,7 +11,7 @@
     },
     
     handleChangeCri: function (component, event, helper) {
-        helper.carregaCriSelecionada(component, event);
+        helper.recuperaCriSelecionada(component, event);
     },
     
     incluirCri: function (component, event, helper) {
@@ -24,7 +24,7 @@
 
     showModal : function(component, event, helper) {
         component.set("v.showModal",true);
-        helper.carregaCriaturas( component, event );
+        helper.recuperaCri(component, event);
 	},
     
     closeModal : function(component, event, helper) {

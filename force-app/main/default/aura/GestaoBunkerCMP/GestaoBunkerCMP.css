@@ -1,2 +1,19 @@
-.THIS {
+.THIS .bunker-message-ativo{
+    background-color: #246A17;
+    border: grey 1px solid;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    font-size: initial;
+    color: white;
+}
+
+.THIS .bunker-message-inativo{
+    background-color: darkred;
+    border: grey 1px solid;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    font-size: initial;
+    color: white;
 }
