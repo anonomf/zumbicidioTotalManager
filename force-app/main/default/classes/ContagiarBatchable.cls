@@ -12,10 +12,10 @@ public class ContagiarBatchable implements Database.Batchable<SObject>{
 
     }
 
-    public void execute(Database.BatchableContext BC, List<Criatura__c> scope){
+    public void execute(Database.BatchableContext BC, List<criatura__c> scope){
 
-        List<Criatura__c> criList = (List<criatura__c>) scope;
-        Map<id, Criatura__c> criUpdateList = new Map<id, Criatura__c>();
+        List<criatura__c> criList = (List<criatura__c>) scope;
+        Map<id, criatura__c> criUpdateList = new Map<id, criatura__c>();
         List<Criatura__c> humList = preencheListaCriaturaRecordtype(humanId, criList);
         List<Criatura__c> zumList = preencheListaCriaturaRecordtype(zumbieId, criList);
         for(Criatura__c zum : zumList){

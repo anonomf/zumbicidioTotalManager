@@ -7,7 +7,7 @@
 	},
 
     handleChange: function (component, event, helper) {
-        helper.carregaMembros(component, event);
+        helper.selecionaBunker(component, event);
     },
     
     handleChangeCri: function (component, event, helper) {
@@ -19,16 +19,15 @@
     },
 
     viewRecord : function(component, event, helper) {
-        helper.viewRecord( component, event );
+        helper.viewRecord(component, event);
 	},
 
     showModal : function(component, event, helper) {
-        component.set("v.showModal",true);
-        helper.recuperaCri(component, event);
+        helper.showModalHelper(component, event);
 	},
     
     closeModal : function(component, event, helper) {
-        component.set("v.showModal",false);
+        helper.closeModalHelper(component, event);
 	}
 
 })

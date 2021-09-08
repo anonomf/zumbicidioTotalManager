@@ -7,13 +7,13 @@
 	<lightning:card variant="Narrow" title="Adiciona Recursos" iconName="custom:custom9">
         <p class="slds-p-horizontal_small">
             <lightning:combobox 
-                name="listaRecursos" 
-                label="Selecione um Recurso" 
-                value="inProgress" 
-                placeholder="selecione um recurso" 
-                options="{! v.recursosLst }" 
-                onchange="{! c.handleChange }"
-            />
+                                name="listaRecursos" 
+                                label="Selecione um Recurso" 
+                                value="inProgress" 
+                                placeholder="selecione um recurso" 
+                                options="{! v.recursosLst }" 
+                                onchange="{! c.handleChange }"
+           />
         </p>
         <aura:set attribute="footer">
             <lightning:button variant="brand" label="Adicionar" title="Clique aqui para adicionar um recurso." onclick="{! c.salvar }" disabled="{! v.recursoSelecionado == null }" />

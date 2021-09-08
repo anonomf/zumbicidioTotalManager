@@ -27,11 +27,10 @@
 	},
 
     carregaMembros : function( component, event ) {
-        let bunkerSelecionado = event.getParam("value");
-        let action = component.get("c.recuperaBunkerMembros");
-        component.set("v.bunkerSelecionado",bunkerSelecionado);
+        let bunkerSelecionado = component.get("v.bunkerSelecionado");
 
         component.set('v.showSpinner', true);
+        let action = component.get("c.recuperaBunkerMembros");
 
         action.setParams({
             bunkerId : bunkerSelecionado
@@ -192,7 +191,7 @@
 
     showModalHelper : function( component, event ) {
         component.set("v.showModal",true);
-        this.carregaCriaturas( component, event );
+        this.recuperaCri(component, event);
 	},
     
     closeModalHelper : function( component, event ) {

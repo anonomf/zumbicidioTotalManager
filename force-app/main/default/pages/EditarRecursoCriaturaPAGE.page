@@ -2,6 +2,7 @@
 
     <apex:form >
         <apex:pageBlock title="Tela de Edição de Criaturas e Recursos">
+            
             <apex:pageMessages />
             <apex:pageBlockButtons >
                 <apex:commandButton value="Voltar" action="{!cancelar}" />
@@ -25,6 +26,7 @@
                     </apex:column>
                 </apex:dataTable>
             </apex:pageBlockSection>
+
         </apex:pageBlock>
     </apex:form>
 
